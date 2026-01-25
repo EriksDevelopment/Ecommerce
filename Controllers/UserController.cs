@@ -1,5 +1,5 @@
 using Ecommerce_Api.Core.Interfaces;
-using Ecommerce_Api.Data.Dtos;
+using Ecommerce_Api.Data.Dtos.User;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -35,6 +35,32 @@ namespace Ecommerce_Api.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Something went wrong while registering user.");
+                return StatusCode(500, "Something went wrong.");
+            }
+        }
+
+        [AllowAnonymous]
+        [HttpPost("login")]
+        public async Task<ActionResult<UserLoginResponseDto>> Login(UserLoginRequestDto dto)
+        {
+            try
+            {
+                var result = await _userService.LoginAsync(dto);
+
+                _logger.LogInformation("Login successfull.");
+                return Ok(result);
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                return Unauthorized(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Something went wrong while logging in.");
                 return StatusCode(500, "Something went wrong.");
             }
         }

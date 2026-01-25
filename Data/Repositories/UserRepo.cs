@@ -24,5 +24,7 @@ namespace Ecommerce_Api.Data.Repositories
         public async Task<bool> EmailExistsAsync(string email) =>
             await _context.Users.AnyAsync(u => u.Email == email);
 
+        public async Task<User?> GetEmailAsync(string email) =>
+            await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
     }
 }

@@ -1,4 +1,4 @@
-namespace Ecommerce_Api.Data.Dtos
+namespace Ecommerce_Api.Data.Dtos.User
 {
     public class UserRegisterResponseDto
     {

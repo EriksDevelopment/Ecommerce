@@ -7,5 +7,6 @@ namespace Ecommerce_Api.Data.Interfaces
         Task AddUserAsync(User user);
         Task<bool> UserNameExistsAsync(string userName);
         Task<bool> EmailExistsAsync(string email);
+        Task<User?> GetEmailAsync(string email);
     }
 }

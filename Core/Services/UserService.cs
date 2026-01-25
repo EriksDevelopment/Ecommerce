@@ -1,5 +1,7 @@
+using System.ComponentModel.DataAnnotations;
 using Ecommerce_Api.Core.Interfaces;
-using Ecommerce_Api.Data.Dtos;
+using Ecommerce_Api.Core.Security;
+using Ecommerce_Api.Data.Dtos.User;
 using Ecommerce_Api.Data.Interfaces;
 using Ecommerce_Api.Data.Models;
 
@@ -8,16 +10,18 @@ namespace Ecommerce_Api.Core.Service
     public class UserService : IUserService
     {
         private readonly IUserRepo _userRepo;
-        public UserService(IUserRepo userRepo)
+        private readonly JwtService _jwt;
+        public UserService(IUserRepo userRepo, JwtService jwt)
         {
             _userRepo = userRepo;
+            _jwt = jwt;
         }
 
         public async Task<UserRegisterResponseDto> AddAsync(UserRegisterRequestDto dto)
         {
             if (string.IsNullOrWhiteSpace(dto.UserName) ||
                 string.IsNullOrWhiteSpace(dto.Email) ||
-                string.IsNullOrWhiteSpace(dto.PasswordHash) ||
+                string.IsNullOrWhiteSpace(dto.Password) ||
                 string.IsNullOrWhiteSpace(dto.Address) ||
                 string.IsNullOrWhiteSpace(dto.PostalCode) ||
                 string.IsNullOrWhiteSpace(dto.City))
@@ -31,7 +35,7 @@ namespace Ecommerce_Api.Core.Service
             if (emailExists)
                 throw new ArgumentException("Email already exists.");
 
-            var password = BCrypt.Net.BCrypt.HashPassword(dto.PasswordHash);
+            var password = BCrypt.Net.BCrypt.HashPassword(dto.Password);
 
             var user = new User
             {
@@ -53,6 +57,25 @@ namespace Ecommerce_Api.Core.Service
                 Address = $"{user.Address}, {user.PostalCode}, {user.City}",
                 UserNumber = user.UserNumber,
                 CreatedAt = user.CreatedAt
+            };
+        }
+
+        public async Task<UserLoginResponseDto> LoginAsync(UserLoginRequestDto dto)
+        {
+            if (string.IsNullOrWhiteSpace(dto.Email) ||
+                string.IsNullOrWhiteSpace(dto.Password))
+                throw new ArgumentException("Empty fields are not allowed.");
+
+            var email = await _userRepo.GetEmailAsync(dto.Email);
+
+            if (email == null || !BCrypt.Net.BCrypt.Verify(dto.Password, email.PasswordHash))
+                throw new UnauthorizedAccessException("Invalid email or password.");
+
+            var token = _jwt.TokenGenerator(email.Id, "User");
+
+            return new UserLoginResponseDto
+            {
+                Token = token
             };
         }
     }
