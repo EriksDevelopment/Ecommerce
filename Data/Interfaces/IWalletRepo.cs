@@ -5,5 +5,6 @@ namespace Ecommerce_Api.Data.Interfaces
     public interface IWalletRepo
     {
         Task AddAsync(Wallet wallet);
+        Task<List<Wallet>> OverViewAccountAsync(int userId);
     }
 }

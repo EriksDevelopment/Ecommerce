@@ -1,5 +1,6 @@
 using Ecommerce_Api.Data.Interfaces;
 using Ecommerce_Api.Data.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace Ecommerce_Api.Data.Repositories
 {
@@ -16,5 +17,8 @@ namespace Ecommerce_Api.Data.Repositories
             _context.Wallets.Add(wallet);
             await _context.SaveChangesAsync();
         }
+
+        public async Task<List<Wallet>> OverViewAccountAsync(int userId) =>
+            await _context.Wallets.Where(w => w.UserId == userId).ToListAsync();
     }
 }
