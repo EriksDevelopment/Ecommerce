@@ -89,5 +89,34 @@ namespace Ecommerce_Api.Controllers
                 return StatusCode(500, "Something went wrong.");
             }
         }
+
+        [Authorize(Roles = "User")]
+        [HttpDelete("delete/{password}")]
+        public async Task<ActionResult<UserDeleteResponseDto>> Delete(string password)
+        {
+            try
+            {
+                var user = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+
+                var result = await _userService.DeleteAsync(password, user);
+
+                _logger.LogInformation("User successfully deleted.");
+                return Ok(result);
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                return Unauthorized(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Something went wrong while deleting user.");
+                return StatusCode(500, "Something went wrong.");
+            }
+
+        }
     }
 }

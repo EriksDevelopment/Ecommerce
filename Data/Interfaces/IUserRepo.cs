@@ -10,5 +10,6 @@ namespace Ecommerce_Api.Data.Interfaces
         Task<User?> GetEmailAsync(string email);
         Task UpdateUserAsync(User user);
         Task<User?> GetByIdAsync(int id);
+        Task DeleteUserAsync(User user);
     }
 }

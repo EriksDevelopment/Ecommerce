@@ -34,5 +34,11 @@ namespace Ecommerce_Api.Data.Repositories
         }
         public async Task<User?> GetByIdAsync(int id) =>
             await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
+
+        public async Task DeleteUserAsync(User user)
+        {
+            _context.Users.Remove(user);
+            await _context.SaveChangesAsync();
+        }
     }
 }

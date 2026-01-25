@@ -1,5 +1,3 @@
-using System.ComponentModel.DataAnnotations;
-using BCrypt.Net;
 using Ecommerce_Api.Core.Interfaces;
 using Ecommerce_Api.Core.Security;
 using Ecommerce_Api.Data.Dtos.User;
@@ -134,6 +132,26 @@ namespace Ecommerce_Api.Core.Service
                 Address = user.Address,
                 PostalCode = user.PostalCode,
                 City = user.City
+            };
+        }
+
+        public async Task<UserDeleteResponseDto> DeleteAsync(string password, int id)
+        {
+            if (string.IsNullOrWhiteSpace(password))
+                throw new ArgumentException("Password can't be empty.");
+
+            var user = await _userRepo.GetByIdAsync(id);
+            if (user == null)
+                throw new ArgumentException("User not found.");
+
+            if (!BCrypt.Net.BCrypt.Verify(password, user.PasswordHash))
+                throw new UnauthorizedAccessException("Invalid password.");
+
+            await _userRepo.DeleteUserAsync(user);
+
+            return new UserDeleteResponseDto
+            {
+                Message = $"User {user.UserName} successfully deleted."
             };
         }
     }
