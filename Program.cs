@@ -8,9 +8,10 @@ builder.Services.AddDbContext<EcommerceDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddSwaggerGenServices();
-builder.Services.AddScopedServices();
-
+builder.Services.AddAuthenticationServices(builder.Configuration);
 builder.Services.AddAuthorization();
+
+builder.Services.AddScopedServices();
 builder.Services.AddControllers();
 
 var app = builder.Build();
@@ -23,6 +24,8 @@ app.UseSwaggerUI(c =>
     c.RoutePrefix = string.Empty;
 });
 
+app.UseAuthentication();
 app.UseAuthorization();
+
 app.MapControllers();
 app.Run();
