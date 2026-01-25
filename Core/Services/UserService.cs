@@ -43,7 +43,8 @@ namespace Ecommerce_Api.Core.Service
                 PasswordHash = password,
                 Address = dto.Address,
                 PostalCode = dto.PostalCode,
-                City = dto.City
+                City = dto.City,
+                Role = UserRole.User
             };
 
             await _userRepo.AddUserAsync(user);
@@ -55,7 +56,7 @@ namespace Ecommerce_Api.Core.Service
                 Email = user.Email,
                 Address = $"{user.Address}, {user.PostalCode}, {user.City}",
                 UserNumber = user.UserNumber,
-                CreatedAt = user.CreatedAt
+                CreatedAt = user.CreatedAt,
             };
         }
 
@@ -65,12 +66,13 @@ namespace Ecommerce_Api.Core.Service
                 string.IsNullOrWhiteSpace(dto.Password))
                 throw new ArgumentException("Empty fields are not allowed.");
 
-            var email = await _userRepo.GetEmailAsync(dto.Email);
+            var user = await _userRepo.GetEmailAsync(dto.Email);
 
-            if (email == null || !BCrypt.Net.BCrypt.Verify(dto.Password, email.PasswordHash))
+            if (user == null || !BCrypt.Net.BCrypt.Verify(dto.Password, user.PasswordHash))
                 throw new UnauthorizedAccessException("Invalid email or password.");
 
-            var token = _jwt.TokenGenerator(email.Id, "User");
+
+            var token = _jwt.TokenGenerator(user.Id, user.Role);
 
             return new UserLoginResponseDto
             {

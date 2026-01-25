@@ -55,6 +55,9 @@ namespace Ecommerce_Api.Data
                 .Property(oi => oi.UnitPrice)
                 .HasPrecision(18, 2);
 
+            modelBuilder.Entity<Wallet>()
+                .Property(w => w.Amount)
+                .HasPrecision(18, 2);
 
             modelBuilder.Entity<Order>()
                 .HasMany(o => o.OrderItems)
@@ -90,6 +93,12 @@ namespace Ecommerce_Api.Data
                 .HasMany(u => u.CartItems)
                 .WithOne(c => c.User)
                 .HasForeignKey(c => c.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<User>()
+                .HasMany(u => u.Wallets)
+                .WithOne(w => w.User)
+                .HasForeignKey(w => w.UserId)
                 .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<Product>()

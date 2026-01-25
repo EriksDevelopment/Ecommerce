@@ -1,6 +1,7 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using Ecommerce_Api.Data.Models;
 using Microsoft.IdentityModel.Tokens;
 
 namespace Ecommerce_Api.Core.Security
@@ -13,7 +14,7 @@ namespace Ecommerce_Api.Core.Security
             _config = config;
         }
 
-        public string TokenGenerator(int id, string role)
+        public string TokenGenerator(int id, UserRole role)
         {
             var key = _config["Jwt:Key"];
             if (key == null)
@@ -22,7 +23,7 @@ namespace Ecommerce_Api.Core.Security
             var claims = new[]
             {
                 new Claim(ClaimTypes.NameIdentifier, id.ToString()),
-                new Claim(ClaimTypes.Role, role)
+                new Claim(ClaimTypes.Role, role.ToString())
             };
 
             var tokenDescriptor = new SecurityTokenDescriptor

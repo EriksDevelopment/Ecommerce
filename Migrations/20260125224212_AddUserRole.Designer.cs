@@ -4,6 +4,7 @@ using Ecommerce_Api.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Ecommerce_Api.Migrations
 {
     [DbContext(typeof(EcommerceDbContext))]
-    partial class EcommerceDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260125224212_AddUserRole")]
+    partial class AddUserRole
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -276,35 +279,6 @@ namespace Ecommerce_Api.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("Ecommerce_Api.Data.Models.Wallet", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<decimal>("Amount")
-                        .HasPrecision(18, 2)
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Wallet");
-                });
-
             modelBuilder.Entity("Ecommerce_Api.Data.Models.Order", b =>
                 {
                     b.HasOne("Ecommerce_Api.Data.Models.User", "User")
@@ -384,17 +358,6 @@ namespace Ecommerce_Api.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Ecommerce_Api.Data.Models.Wallet", b =>
-                {
-                    b.HasOne("Ecommerce_Api.Data.Models.User", "User")
-                        .WithMany("Wallets")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("Ecommerce_Api.Data.Models.Category", b =>
                 {
                     b.Navigation("Products");
@@ -421,8 +384,6 @@ namespace Ecommerce_Api.Migrations
                     b.Navigation("Orders");
 
                     b.Navigation("Reviews");
-
-                    b.Navigation("Wallets");
                 });
 #pragma warning restore 612, 618
         }
