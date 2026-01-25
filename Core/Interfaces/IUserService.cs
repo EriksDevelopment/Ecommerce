@@ -6,5 +6,6 @@ namespace Ecommerce_Api.Core.Interfaces
     {
         Task<UserRegisterResponseDto> AddAsync(UserRegisterRequestDto dto);
         Task<UserLoginResponseDto> LoginAsync(UserLoginRequestDto dto);
+        Task<UserUpdateResponseDto> UpdateAsync(UserUpdateRequestDto dto, int id);
     }
 }

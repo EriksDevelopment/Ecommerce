@@ -26,5 +26,13 @@ namespace Ecommerce_Api.Data.Repositories
 
         public async Task<User?> GetEmailAsync(string email) =>
             await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
+
+        public async Task UpdateUserAsync(User user)
+        {
+            _context.Users.Update(user);
+            await _context.SaveChangesAsync();
+        }
+        public async Task<User?> GetByIdAsync(int id) =>
+            await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
     }
 }

@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using BCrypt.Net;
 using Ecommerce_Api.Core.Interfaces;
 using Ecommerce_Api.Core.Security;
 using Ecommerce_Api.Data.Dtos.User;
@@ -76,6 +77,63 @@ namespace Ecommerce_Api.Core.Service
             return new UserLoginResponseDto
             {
                 Token = token
+            };
+        }
+
+        public async Task<UserUpdateResponseDto> UpdateAsync(UserUpdateRequestDto dto, int id)
+        {
+            var user = await _userRepo.GetByIdAsync(id);
+            if (user == null)
+                throw new ArgumentException("User not found.");
+
+            if (!string.IsNullOrWhiteSpace(dto.UserName))
+            {
+                var exists = await _userRepo.UserNameExistsAsync(dto.UserName);
+                if (exists)
+                    throw new ArgumentException("Username already taken.");
+
+                user.UserName = dto.UserName;
+            }
+
+            if (!string.IsNullOrWhiteSpace(dto.Email))
+            {
+                var exists = await _userRepo.UserNameExistsAsync(dto.Email);
+                if (exists)
+                    throw new ArgumentException("Username already taken.");
+
+                user.Email = dto.Email;
+            }
+
+            if (!string.IsNullOrWhiteSpace(dto.Email))
+            {
+                user.PasswordHash = BCrypt.Net.BCrypt.HashPassword(dto.Password);
+            }
+
+            if (!string.IsNullOrWhiteSpace(dto.Address))
+            {
+                user.Address = dto.Address;
+            }
+
+            if (!string.IsNullOrWhiteSpace(dto.PostalCode))
+            {
+                user.PostalCode = dto.PostalCode;
+            }
+
+            if (!string.IsNullOrWhiteSpace(dto.City))
+            {
+                user.City = dto.City;
+            }
+
+            await _userRepo.UpdateUserAsync(user);
+
+            return new UserUpdateResponseDto
+            {
+                Message = "Profile updated.",
+                UserName = user.UserName,
+                Email = user.Email,
+                Address = user.Address,
+                PostalCode = user.PostalCode,
+                City = user.City
             };
         }
     }

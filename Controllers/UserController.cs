@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using Ecommerce_Api.Core.Interfaces;
 using Ecommerce_Api.Data.Dtos.User;
 using Microsoft.AspNetCore.Authorization;
@@ -61,6 +62,30 @@ namespace Ecommerce_Api.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Something went wrong while logging in.");
+                return StatusCode(500, "Something went wrong.");
+            }
+        }
+
+        [Authorize(Roles = "User")]
+        [HttpPut("update")]
+        public async Task<ActionResult<UserUpdateResponseDto>> Update(UserUpdateRequestDto dto)
+        {
+            try
+            {
+                var user = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+
+                var result = await _userService.UpdateAsync(dto, user);
+
+                _logger.LogInformation("Profile successfully updated.");
+                return Ok(result);
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Something went wrong while updating profile.");
                 return StatusCode(500, "Something went wrong.");
             }
         }
