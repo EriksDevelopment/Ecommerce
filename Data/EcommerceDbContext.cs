@@ -14,6 +14,7 @@ namespace Ecommerce_Api.Data
         public DbSet<OrderItem> OrderItems { get; set; } = null!;
         public DbSet<Review> Reviews { get; set; } = null!;
         public DbSet<ShoppingCart> ShoppingCarts { get; set; } = null!;
+        public DbSet<Wallet> Wallets { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

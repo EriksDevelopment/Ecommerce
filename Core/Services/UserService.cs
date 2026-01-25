@@ -10,10 +10,12 @@ namespace Ecommerce_Api.Core.Service
     {
         private readonly IUserRepo _userRepo;
         private readonly JwtService _jwt;
-        public UserService(IUserRepo userRepo, JwtService jwt)
+        private readonly IWalletRepo _walletRepo;
+        public UserService(IUserRepo userRepo, JwtService jwt, IWalletRepo walletRepo)
         {
             _userRepo = userRepo;
             _jwt = jwt;
+            _walletRepo = walletRepo;
         }
 
         public async Task<UserRegisterResponseDto> AddAsync(UserRegisterRequestDto dto)
@@ -36,6 +38,7 @@ namespace Ecommerce_Api.Core.Service
 
             var password = BCrypt.Net.BCrypt.HashPassword(dto.Password);
 
+
             var user = new User
             {
                 UserName = dto.UserName,
@@ -49,6 +52,15 @@ namespace Ecommerce_Api.Core.Service
 
             await _userRepo.AddUserAsync(user);
 
+            var wallet = new Wallet
+            {
+                UserId = user.Id,
+                Amount = 20000,
+                Description = "E-commerce Account",
+            };
+
+            await _walletRepo.AddAsync(wallet);
+
             return new UserRegisterResponseDto
             {
                 Message = "Welcome to E-commerce!",
@@ -57,6 +69,9 @@ namespace Ecommerce_Api.Core.Service
                 Address = $"{user.Address}, {user.PostalCode}, {user.City}",
                 UserNumber = user.UserNumber,
                 CreatedAt = user.CreatedAt,
+                Amount = wallet.Amount,
+                Description = wallet.Description,
+                AccountNumber = wallet.AccountNumber
             };
         }
 

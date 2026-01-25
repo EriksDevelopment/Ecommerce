@@ -10,6 +10,7 @@ namespace Ecommerce_Api.Data.Models
         public decimal Amount { get; set; }
 
         public string Description { get; set; } = null!;
+        public string AccountNumber { get; set; } = Guid.NewGuid().ToString("N");
 
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     }

@@ -15,6 +15,8 @@ namespace Ecommerce_Api.Extensions
             services.AddScoped<IUserRepo, UserRepo>();
             services.AddScoped<IUserService, UserService>();
 
+            services.AddScoped<IWalletRepo, WalletRepo>();
+
             return services;
         }
     }
