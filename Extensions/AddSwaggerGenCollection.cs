@@ -1,3 +1,4 @@
+using Ecommerce_Api.Swagger;
 using Microsoft.OpenApi.Models;
 
 namespace Ecommerce_Api.Extensions
@@ -36,6 +37,7 @@ namespace Ecommerce_Api.Extensions
                         Array.Empty<string>()
                     }
                 });
+                c.OperationFilter<AuthorizeCheckOperationFilter>();
             });
 
             return services;
