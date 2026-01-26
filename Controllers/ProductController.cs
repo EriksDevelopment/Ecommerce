@@ -38,5 +38,27 @@ namespace Ecommerce_Api.Controllers
                 return StatusCode(500, "Something went wrong.");
             }
         }
+
+        [Authorize(Roles = "Admin")]
+        [HttpDelete("delete/{productNumber}")]
+        public async Task<ActionResult<ProductDeleteResponseDto>> Delete(string productNumber)
+        {
+            try
+            {
+                var result = await _productService.DeleteAsync(productNumber);
+
+                _logger.LogInformation("Product deleted.");
+                return Ok(result);
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Something went wrong while deleting product.");
+                return StatusCode(500, "Something went wrong.");
+            }
+        }
     }
 }

@@ -59,5 +59,23 @@ namespace Ecommerce_Api.Core.Service
                 CreatedAt = product.CreatedAt
             };
         }
+
+        public async Task<ProductDeleteResponseDto> DeleteAsync(string productNumber)
+        {
+            if (string.IsNullOrWhiteSpace(productNumber))
+                throw new ArgumentException("Product number can't be empty.");
+
+            var product = await _productRepo.GetProductNumberAsync(productNumber);
+            if (product == null)
+                throw new ArgumentException("Product number not found.");
+
+            await _productRepo.DeleteAsync(product);
+
+            return new ProductDeleteResponseDto
+            {
+                Message = $"Product with id {product.ProductNumber} deleted.",
+                ProductName = product.Name
+            };
+        }
     }
 }

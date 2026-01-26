@@ -1,5 +1,6 @@
 using Ecommerce_Api.Data.Interfaces;
 using Ecommerce_Api.Data.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace Ecommerce_Api.Data.Repositories
 {
@@ -14,6 +15,15 @@ namespace Ecommerce_Api.Data.Repositories
         public async Task AddAsync(Product product)
         {
             _context.Products.Add(product);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task<Product?> GetProductNumberAsync(string productNumber) =>
+            await _context.Products.FirstOrDefaultAsync(p => p.ProductNumber == productNumber);
+
+        public async Task DeleteAsync(Product product)
+        {
+            _context.Products.Remove(product);
             await _context.SaveChangesAsync();
         }
     }
