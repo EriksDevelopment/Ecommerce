@@ -62,14 +62,16 @@ namespace Ecommerce_Api.Controllers
         }
 
         [AllowAnonymous]
-        [HttpGet("view")]
-        public async Task<ActionResult<List<ProductViewResponseDto>>> View()
+        [HttpGet]
+        public async Task<ActionResult<List<ProductViewResponseDto>>> Search(
+            [FromQuery] string? name,
+            [FromQuery] string? category)
         {
             try
             {
-                var result = await _productService.ViewAsync();
+                var result = await _productService.GetAsync(name, category);
 
-                _logger.LogInformation("All products retrieved.");
+                _logger.LogInformation("Search results successfully retrieved.");
                 return Ok(result);
             }
             catch (ArgumentException ex)
@@ -78,7 +80,7 @@ namespace Ecommerce_Api.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Something went wrong while retrieving all products");
+                _logger.LogError(ex, "Something went wrong while searching for product.");
                 return StatusCode(500, "Something went wrong.");
             }
         }

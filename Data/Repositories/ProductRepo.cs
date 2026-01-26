@@ -27,10 +27,25 @@ namespace Ecommerce_Api.Data.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task<List<Product>> ViewProductAsync() =>
-            await _context.Products
-            .Include(p => p.Category)
-            .OrderByDescending(p => p.CreatedAt)
-            .ToListAsync();
+        public async Task<List<Product>> SearchProductAsync(string? name, string? category)
+        {
+            var query = _context.Products
+                .Include(p => p.Category)
+                .AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(name))
+            {
+                query = query.Where(p =>
+                    EF.Functions.Like(p.Name, $"%{name}%"));
+            }
+            if (!string.IsNullOrWhiteSpace(category))
+            {
+                query = query.Where(p =>
+                    EF.Functions.Like(p.Category.Name, $"%{category}%"));
+            }
+
+            return await query.ToListAsync();
+        }
+
     }
 }

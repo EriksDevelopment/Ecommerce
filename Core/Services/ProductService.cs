@@ -78,10 +78,11 @@ namespace Ecommerce_Api.Core.Service
             };
         }
 
-        public async Task<List<ProductViewResponseDto>> ViewAsync()
+        public async Task<List<ProductViewResponseDto>> GetAsync(string? name, string? category)
         {
-            var products = await _productRepo.ViewProductAsync();
-            if (products == null)
+            var products = await _productRepo.SearchProductAsync(name, category);
+
+            if (!products.Any())
                 throw new ArgumentException("No products found.");
 
             return products.Select(p => new ProductViewResponseDto
