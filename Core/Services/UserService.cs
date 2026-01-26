@@ -97,6 +97,14 @@ namespace Ecommerce_Api.Core.Service
 
         public async Task<UserUpdateResponseDto> UpdateAsync(UserUpdateRequestDto dto, int id)
         {
+            if (string.IsNullOrWhiteSpace(dto.UserName) &&
+                string.IsNullOrWhiteSpace(dto.Email) &&
+                string.IsNullOrWhiteSpace(dto.Password) &&
+                string.IsNullOrWhiteSpace(dto.Address) &&
+                string.IsNullOrWhiteSpace(dto.PostalCode) &&
+                string.IsNullOrWhiteSpace(dto.City))
+                throw new ArgumentException("Atleast one field must be changed to update.");
+
             var user = await _userRepo.GetByIdAsync(id);
             if (user == null)
                 throw new ArgumentException("User not found.");
