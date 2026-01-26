@@ -77,5 +77,23 @@ namespace Ecommerce_Api.Core.Service
                 ProductName = product.Name
             };
         }
+
+        public async Task<List<ProductViewResponseDto>> ViewAsync()
+        {
+            var products = await _productRepo.ViewProductAsync();
+            if (products == null)
+                throw new ArgumentException("No products found.");
+
+            return products.Select(p => new ProductViewResponseDto
+            {
+                Name = p.Name,
+                Description = p.Description,
+                Price = p.Price,
+                StockQuantity = p.StockQuantity,
+                Category = p.Category.Name,
+                ProductNumber = p.ProductNumber,
+                CreatedAt = p.CreatedAt
+            }).ToList();
+        }
     }
 }

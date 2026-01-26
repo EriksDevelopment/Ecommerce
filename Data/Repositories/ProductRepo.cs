@@ -26,5 +26,11 @@ namespace Ecommerce_Api.Data.Repositories
             _context.Products.Remove(product);
             await _context.SaveChangesAsync();
         }
+
+        public async Task<List<Product>> ViewProductAsync() =>
+            await _context.Products
+            .Include(p => p.Category)
+            .OrderByDescending(p => p.CreatedAt)
+            .ToListAsync();
     }
 }

@@ -7,5 +7,6 @@ namespace Ecommerce_Api.Data.Interfaces
         Task AddAsync(Product product);
         Task<Product?> GetProductNumberAsync(string productNumber);
         Task DeleteAsync(Product product);
+        Task<List<Product>> ViewProductAsync();
     }
 }

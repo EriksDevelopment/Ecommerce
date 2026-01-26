@@ -60,5 +60,27 @@ namespace Ecommerce_Api.Controllers
                 return StatusCode(500, "Something went wrong.");
             }
         }
+
+        [AllowAnonymous]
+        [HttpGet("view")]
+        public async Task<ActionResult<List<ProductViewResponseDto>>> View()
+        {
+            try
+            {
+                var result = await _productService.ViewAsync();
+
+                _logger.LogInformation("All products retrieved.");
+                return Ok(result);
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Something went wrong while retrieving all products");
+                return StatusCode(500, "Something went wrong.");
+            }
+        }
     }
 }
