@@ -18,6 +18,11 @@ namespace Ecommerce_Api.Extensions
             services.AddScoped<IWalletRepo, WalletRepo>();
             services.AddScoped<IWalletService, WalletService>();
 
+            services.AddScoped<IProductRepo, ProductRepo>();
+            services.AddScoped<IProductService, ProductService>();
+
+            services.AddScoped<ICategoryRepo, CategoryRepo>();
+
             return services;
         }
     }
