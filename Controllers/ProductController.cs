@@ -86,7 +86,7 @@ namespace Ecommerce_Api.Controllers
         }
 
         [Authorize(Roles = "Admin")]
-        [HttpPost("update/{id}")]
+        [HttpPut("update/{id}")]
         public async Task<ActionResult<ProductUpdateResponseDto>> Update(int id, [FromBody] ProductUpdateRequestDto dto)
         {
             try
