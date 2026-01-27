@@ -8,5 +8,7 @@ namespace Ecommerce_Api.Data.Interfaces
         Task<Product?> GetProductNumberAsync(string productNumber);
         Task DeleteAsync(Product product);
         Task<List<Product>> SearchProductAsync(string? name, string? category);
+        Task UpdateAsync(Product product);
+        Task<Product?> GetByIdAsync(int id);
     }
 }

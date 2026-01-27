@@ -1,6 +1,7 @@
 using Ecommerce_Api.Data.Interfaces;
 using Ecommerce_Api.Data.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Identity.Client;
 
 namespace Ecommerce_Api.Data.Repositories
 {
@@ -47,5 +48,15 @@ namespace Ecommerce_Api.Data.Repositories
             return await query.ToListAsync();
         }
 
+        public async Task UpdateAsync(Product product)
+        {
+            _context.Products.Update(product);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task<Product?> GetByIdAsync(int id) =>
+            await _context.Products
+                .Include(p => p.Category)
+                .FirstOrDefaultAsync(p => p.Id == id);
     }
 }

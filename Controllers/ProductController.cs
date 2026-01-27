@@ -84,5 +84,27 @@ namespace Ecommerce_Api.Controllers
                 return StatusCode(500, "Something went wrong.");
             }
         }
+
+        [Authorize(Roles = "Admin")]
+        [HttpPost("update/{id}")]
+        public async Task<ActionResult<ProductUpdateResponseDto>> Update(int id, [FromBody] ProductUpdateRequestDto dto)
+        {
+            try
+            {
+                var result = await _productService.UpdateAsync(dto, id);
+
+                _logger.LogInformation("Product successfully updated.");
+                return Ok(result);
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Something went wrong while updating product");
+                return StatusCode(500, "Something went wrong.");
+            }
+        }
     }
 }
