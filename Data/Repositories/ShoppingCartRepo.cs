@@ -18,7 +18,7 @@ namespace Ecommerce_Api.Data.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task<ShoppingCart?> itemExists(int userId, int productId) =>
+        public async Task<ShoppingCart?> ItemExists(int userId, int productId) =>
             await _context.ShoppingCarts
                 .Include(c => c.Product)
                 .ThenInclude(p => p.Category)

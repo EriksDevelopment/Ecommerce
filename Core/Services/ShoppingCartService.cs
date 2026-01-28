@@ -26,7 +26,7 @@ namespace Ecommerce_Api.Core.Services
             if (product == null)
                 throw new Exception("Product not found");
 
-            var existingItem = await _shoppingCartRepo.itemExists(userId, product.Id);
+            var existingItem = await _shoppingCartRepo.ItemExists(userId, product.Id);
 
             if (existingItem != null)
             {

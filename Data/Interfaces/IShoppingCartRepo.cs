@@ -5,7 +5,7 @@ namespace Ecommerce_Api.Data.Interfaces
     public interface IShoppingCartRepo
     {
         Task AddAsync(ShoppingCart shoppingCart);
-        Task<ShoppingCart?> itemExists(int userId, int productId);
+        Task<ShoppingCart?> ItemExists(int userId, int productId);
         Task UpdateAsync(ShoppingCart shoppingCart);
     }
 }
