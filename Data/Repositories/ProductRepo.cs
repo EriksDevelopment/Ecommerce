@@ -20,7 +20,9 @@ namespace Ecommerce_Api.Data.Repositories
         }
 
         public async Task<Product?> GetProductNumberAsync(string productNumber) =>
-            await _context.Products.FirstOrDefaultAsync(p => p.ProductNumber == productNumber);
+            await _context.Products
+                .Include(p => p.Category)
+                .FirstOrDefaultAsync(p => p.ProductNumber == productNumber);
 
         public async Task DeleteAsync(Product product)
         {

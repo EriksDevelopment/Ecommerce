@@ -1,6 +1,7 @@
 using Ecommerce_Api.Core.Interfaces;
 using Ecommerce_Api.Core.Security;
 using Ecommerce_Api.Core.Service;
+using Ecommerce_Api.Core.Services;
 using Ecommerce_Api.Data.Interfaces;
 using Ecommerce_Api.Data.Repositories;
 
@@ -22,6 +23,9 @@ namespace Ecommerce_Api.Extensions
             services.AddScoped<IProductService, ProductService>();
 
             services.AddScoped<ICategoryRepo, CategoryRepo>();
+
+            services.AddScoped<IShoppingCartRepo, ShoppingCartRepo>();
+            services.AddScoped<IShoppingCartService, ShoppingCartService>();
 
             return services;
         }
