@@ -29,5 +29,12 @@ namespace Ecommerce_Api.Data.Repositories
             _context.ShoppingCarts.Update(shoppingCart);
             await _context.SaveChangesAsync();
         }
+
+        public async Task<List<ShoppingCart>> GetCartItemsAsync(int userId) =>
+            await _context.ShoppingCarts
+                .Include(s => s.Product)
+                    .ThenInclude(p => p.Category)
+                .Where(s => s.UserId == userId)
+                .ToListAsync();
     }
 }

@@ -38,5 +38,29 @@ namespace Ecommerce_Api.Controllers
                 return StatusCode(500, "Something went wrong.");
             }
         }
+
+        [Authorize(Roles = "User")]
+        [HttpGet]
+        public async Task<ActionResult<List<ViewCartItemsResponseDto>>> Get()
+        {
+            try
+            {
+                var user = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+
+                var result = await _shoppingCartService.GetCartItemsAsync(user);
+
+                _logger.LogInformation("All products in cart retrieved.");
+                return Ok(result);
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Something went wrong while retrieving all products in cart.");
+                return StatusCode(500, "Something went wrong.");
+            }
+        }
     }
 }

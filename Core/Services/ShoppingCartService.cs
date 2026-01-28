@@ -56,5 +56,22 @@ namespace Ecommerce_Api.Core.Services
                 ProductNumber = existingItem.Product.ProductNumber
             };
         }
+
+        public async Task<List<ViewCartItemsResponseDto>> GetCartItemsAsync(int userId)
+        {
+            var cartItems = await _shoppingCartRepo.GetCartItemsAsync(userId);
+            if (!cartItems.Any())
+                throw new ArgumentException("No products in cart.");
+
+            return cartItems.Select(c => new ViewCartItemsResponseDto
+            {
+                Name = c.Product.Name,
+                Description = c.Product.Description,
+                Price = c.Product.Price,
+                Category = c.Product.Category.Name,
+                Quantity = c.Quantity,
+                ProductNumber = c.Product.ProductNumber
+            }).ToList();
+        }
     }
 }

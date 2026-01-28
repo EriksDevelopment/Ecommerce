@@ -5,5 +5,6 @@ namespace Ecommerce_Api.Core.Interfaces
     public interface IShoppingCartService
     {
         Task<AddToShoppingCartResponseDto> AddProductToCartAsync(AddToShoppingCartRequestDto dto, int userId);
+        Task<List<ViewCartItemsResponseDto>> GetCartItemsAsync(int userId);
     }
 }
